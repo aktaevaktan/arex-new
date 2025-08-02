@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Topex Logistics - Панель Администратора",
+  title: "Arex Logistics - Панель Администратора",
   description:
-    "Административная панель для управления системой Topex Logistics",
-  keywords: "Topex, Logistics, Логистика, Администратор, Панель управления",
-  authors: [{ name: "Topex Logistics" }],
+    "Административная панель для управления системой Arex Logistics",
+  keywords: "Arex, Logistics, Логистика, Администратор, Панель управления",
+  authors: [{ name: "Arex Logistics" }],
   robots: "noindex, nofollow", // Private admin panel
 };
 
