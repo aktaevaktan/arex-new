@@ -112,7 +112,7 @@ export default function LoginPage() {
               />
             </div>
             <Title order={2} className="text-gray-900 mb-2">
-              Topex Logistics
+              Arex Logistics
             </Title>
             <Title order={3} className="text-gray-700 mb-2">
               Панель Администратора
