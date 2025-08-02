@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Вход в систему - Topex Logistics",
-  description: "Авторизация в административной панели Topex Logistics",
-  keywords: "Topex, Logistics, Вход, Авторизация, Логин",
+  title: "Вход в систему - Arex Logistics",
+  description: "Авторизация в административной панели Arex Logistics",
+  keywords: "Arex, Logistics, Вход, Авторизация, Логин",
   robots: "noindex, nofollow",
 };
 
