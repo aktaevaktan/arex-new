@@ -1,0 +1,28 @@
+# === DATABASE & AUTH ===
+DATABASE_URL=postgres://neondb_owner:npg_ks6S2eqDdRia@ep-white-art-a5tr4xht-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+
+JWT_ACCESS_SECRET="your-super-secret-access-token-key-change-this-in-production"
+JWT_REFRESH_SECRET="your-super-secret-refresh-token-key-change-this-in-production"
+
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-nextauth-secret-change-this-in-production"
+
+
+
+
+
+GOOGLE_PROJECT_ID=total-entity-466416-u1
+GOOGLE_CLIENT_EMAIL=my-service-account@total-entity-466416-u1.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC137lNZZDVSFNy\n9AkFhNlmwA+huZ4aFmcHQefGxOwn66C+DiHMmvgCJg9obeX+VmFF1Bz23OwjEF75\nWv0fTGmaMFiNFnOf/qaoM2Rr1V4NsFphlaJNJxofWNyFDM2684bdz/7vekpzL569\nu/Lvkplh2cMBDAeVFm19dSOkzaiIPNGclDzJwIAa80ZM3CZmXBB7tC0ka4w4PyxT\nBa7ZGziTmizzZdV5zCFNYgM3byoFcAbHlnJq2tEILTrKI8meT10FVmwR+T7s57yy\nbfcqCbDvtLq9fURQYBmJNFueZiydBA9ZCDbg1sxP88Nv8m9uq2VOahVzup36ujhY\nIhWuRRChAgMBAAECggEAAvX9JVzcH3PHq4M8bx0BQNBrRLrRz4sKMvqcQk64CUOX\nVKbEXzlN5LOPzEd/Pz1y5JUSImT4+W5pnGnCPY9j9/sV4vigyePWfN4m0jBZYVPL\n2eM6ruK+RLDAuNALPKIcscliRS3ujrrhjMVVvHeclISr/X0vlapVfp2QxqzkM7ES\nON1ay+vff0Tm0adaID4hfDRiS/q8wT7WrSoVg4sSCNEQgqdyu8ZqYCBeKtsoh6M4\nrysFMbDdkMYT1QvTjiLHI0P62658Qdox4kCiBGZjfzP3YkGaWC+6aLV29jupshnh\nMo6FPfIhu+7Ej2joKi25Ljd8PoHrf+YxGTg6XgfegQKBgQDu46HEeeiwpVJyOL2Q\nOWiPD7jI6f+ATQuq4DMLuPyq+XynWhF7a9qw94qs4z5VCmGUjbRjCQPyouHJHk7w\nXTlrRYLJj0IPmIASTHoFR1pM6j3iXb4sHQOUzCJEv8QzrOCTsVG0ZvZXu5twKHo4\nDb9H7IPg9rbFUeUMpIIJpq6UYQKBgQDC5qMZ9u9UN3abpk5q2Aaw5O19XVcKaIRW\nwO96I+xTxhclHvhzu/+HcwpUKSItlQl673fFKQyolf9+LakQv8xxPI1CC90BRTXW\nK3a40S1afeR5/pq0YGR9E1vrbFjHMTvmcXq5IVrEIkDnKLSO4DjLSupO8X7+TGFX\nNj0Yo6vkQQKBgQDeNnxpqQTcHEx+12zt1Zj/Sp6WtaPnksOBpZ+WDfNqjzx2539P\nkVoSN5GVlKSMsmVmrBHZ9a7oar8gN8MyL2WT9Urddxb6Lt8jJmRyuJa06Ue7Y3vc\nyPhl1yUhUkiN0QfuGoloCEaqAWdrgxt9PLxriQR7pMMK9Uzc38HefF/0wQKBgEh3\n2U1eM77soH1faOjxSgucE3H5stN76TkYo/KWSNkdXp2+1kKyNGD4tW51nO+16sB7\nKd11Ve+ZVlZkQ+imaC3yhdN49cPzKAFqR8qQfHyZMsrpkDxhWvvmptbyglAOTmdw\n6mDLtiQXWGqbCAfX90YfpN+Vi9KiM89pq23t7YwBAoGAe6N1sp2WhR1Ec0t/wffB\nhir2eWlt+kHT7nWwwW7GT6Ic+l4vIyOs+klFleInZ78dkMHwO/4PE/BPeJKWbYvD\nquOOCiS7+wC3eRsF7wmoeBIgK9YqmGUNGZZrE9MQN6lXKrzbeIv8MG3rPW1smA2g\nPCch28etnAwQIl5+yiYUBoE=\n-----END PRIVATE KEY-----\n"
+
+
+GREEN_API_URL=https://7105.api.greenapi.com
+GREEN_API_MEDIA_URL=https://7105.media.greenapi.com
+GREEN_API_ID_INSTANCE=7105290516
+GREEN_API_API_TOKEN_INSTANCE=dfeb178a496f4eb581bbe48424386fa98b572c38a54f41faaf
+
+SPREADSHEET_ID=1J0HA-9j6_NAKUQAIrGGth3Kau0WIEFQsYf1SOEt--1c
+
+WEBHOOK_API_KEY=arex-webhook-secure-key-2024
+
+

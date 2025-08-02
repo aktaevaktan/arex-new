@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model SentTrackingNumber {
+  id             String   @id @default(cuid())
+  trackingNumber String   @unique
+  sentAt         DateTime @default(now())
+  clientName     String?
+  phoneNumber    String?
+
+  @@map("sent_tracking_numbers")
+}
+
+model ProcessedSheet {
+  id        String   @id @default(cuid())
+  sheetName String   @unique
+  processedAt DateTime @default(now())
+
+  @@map("processed_sheets")
+}
+
+model WebhookLog {
+  id        String   @id @default(cuid())
+  method    String
+  url       String
+  headers   Json
+  body      Json?
+  status    String
+  error     String?
+  createdAt DateTime @default(now())
+
+  @@map("webhook_logs")
+}

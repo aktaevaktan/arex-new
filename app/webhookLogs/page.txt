@@ -1,0 +1,411 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import {
+  Container,
+  Title,
+  Card,
+  Stack,
+  Button,
+  Group,
+  Text,
+  Badge,
+  ScrollArea,
+  Alert,
+  ActionIcon,
+  Tooltip,
+  Table,
+  Modal,
+  Code,
+  Divider,
+  Grid,
+  Paper,
+  Loader,
+} from "@mantine/core";
+import {
+  IconRefresh,
+  IconTrash,
+  IconEye,
+  IconWebhook,
+  IconClock,
+  IconCheck,
+  IconX,
+  IconActivity,
+  IconDatabase,
+} from "@tabler/icons-react";
+import { useLocalization, LanguageSwitcher } from "../../lib/localization";
+
+interface WebhookLog {
+  id: string;
+  timestamp: string;
+  method: string;
+  url: string;
+  headers: Record<string, string>;
+  body: any;
+  status: "success" | "error";
+  error?: string;
+}
+
+interface WebhookStats {
+  total: number;
+  success: number;
+  errors: number;
+  methods: Record<string, number>;
+  lastActivity: string | null;
+}
+
+export default function WebhookLogsPage() {
+  const { t } = useLocalization();
+  const [logs, setLogs] = useState<WebhookLog[]>([]);
+  const [stats, setStats] = useState<WebhookStats | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedLog, setSelectedLog] = useState<WebhookLog | null>(null);
+  const [modalOpened, setModalOpened] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(false);
+
+  const fetchLogs = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/webhook-logs");
+      if (response.ok) {
+        const data = await response.json();
+        setLogs(data.logs || []);
+        setStats(data.stats || null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch logs:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const clearLogs = async () => {
+    try {
+      const response = await fetch("/api/webhook-logs", { method: "DELETE" });
+      if (response.ok) {
+        setLogs([]);
+        setStats(null);
+      }
+    } catch (error) {
+      console.error("Failed to clear logs:", error);
+    }
+  };
+
+  const viewLogDetails = (log: WebhookLog) => {
+    setSelectedLog(log);
+    setModalOpened(true);
+  };
+
+  const formatTimestamp = (timestamp: string) => {
+    return new Date(timestamp).toLocaleString();
+  };
+
+  const getStatusColor = (status: string) => {
+    return status === "success" ? "green" : "red";
+  };
+
+  const getMethodColor = (method: string) => {
+    const colors: Record<string, string> = {
+      GET: "blue",
+      POST: "green",
+      PUT: "orange",
+      PATCH: "yellow",
+      DELETE: "red",
+    };
+    return colors[method] || "gray";
+  };
+
+  useEffect(() => {
+    fetchLogs();
+  }, []);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (autoRefresh) {
+      interval = setInterval(fetchLogs, 2000); // Refresh every 2 seconds
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [autoRefresh]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <Container size="xl" py="xl">
+        <Stack gap="xl">
+          {/* Header */}
+          <Card
+            shadow="xl"
+            radius="xl"
+            withBorder
+            className="bg-white/80 backdrop-blur-sm"
+          >
+            <Group justify="space-between" align="center">
+              <div>
+                <Title
+                  order={1}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold"
+                >
+                  🔗 {t("webhookLogs.title")}
+                </Title>
+                <Text c="gray.6" size="lg" mt="xs">
+                  {t("webhookLogs.title")}
+                </Text>
+              </div>
+              <Group>
+                <LanguageSwitcher />
+                <Button
+                  onClick={() => setAutoRefresh(!autoRefresh)}
+                  variant={autoRefresh ? "filled" : "outline"}
+                  color={autoRefresh ? "green" : "blue"}
+                  leftSection={<IconActivity size={16} />}
+                >
+                  {autoRefresh ? t("webhookLogs.liveMode") : "Manual"}
+                </Button>
+                <Button
+                  onClick={fetchLogs}
+                  loading={isLoading}
+                  leftSection={<IconRefresh size={16} />}
+                  variant="outline"
+                  color="blue"
+                >
+                  {t("common.refresh")}
+                </Button>
+                <Button
+                  onClick={clearLogs}
+                  leftSection={<IconTrash size={16} />}
+                  variant="outline"
+                  color="red"
+                >
+                  {t("webhookLogs.clearLogs")}
+                </Button>
+              </Group>
+            </Group>
+          </Card>
+
+          {/* Stats */}
+          {stats && (
+            <Grid>
+              <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                <Paper p="md" radius="md" withBorder>
+                  <Group>
+                    <IconDatabase size={24} color="blue" />
+                    <div>
+                      <Text size="xl" fw={700}>
+                        {stats.total}
+                      </Text>
+                      <Text size="sm" c="gray.6">
+                        {t("webhookLogs.totalRequests")}
+                      </Text>
+                    </div>
+                  </Group>
+                </Paper>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                <Paper p="md" radius="md" withBorder>
+                  <Group>
+                    <IconCheck size={24} color="green" />
+                    <div>
+                      <Text size="xl" fw={700}>
+                        {stats.success}
+                      </Text>
+                      <Text size="sm" c="gray.6">
+                        Successful
+                      </Text>
+                    </div>
+                  </Group>
+                </Paper>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                <Paper p="md" radius="md" withBorder>
+                  <Group>
+                    <IconX size={24} color="red" />
+                    <div>
+                      <Text size="xl" fw={700}>
+                        {stats.errors}
+                      </Text>
+                      <Text size="sm" c="gray.6">
+                        Errors
+                      </Text>
+                    </div>
+                  </Group>
+                </Paper>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, sm: 6, md: 3 }}>
+                <Paper p="md" radius="md" withBorder>
+                  <Group>
+                    <IconClock size={24} color="purple" />
+                    <div>
+                      <Text size="sm" fw={700}>
+                        {stats.lastActivity
+                          ? formatTimestamp(stats.lastActivity)
+                          : "No activity"}
+                      </Text>
+                      <Text size="sm" c="gray.6">
+                        Last Activity
+                      </Text>
+                    </div>
+                  </Group>
+                </Paper>
+              </Grid.Col>
+            </Grid>
+          )}
+
+          {/* Logs Table */}
+          <Card
+            shadow="xl"
+            radius="xl"
+            withBorder
+            className="bg-white/80 backdrop-blur-sm"
+          >
+            <Stack gap="md">
+              <Group justify="space-between" align="center">
+                <Title order={3}>
+                  <IconWebhook
+                    size={20}
+                    style={{ display: "inline", marginRight: "8px" }}
+                  />
+                  Recent Webhook Requests
+                </Title>
+                {autoRefresh && <Loader size="sm" />}
+              </Group>
+
+              {logs.length === 0 ? (
+                <Alert color="blue" title="No webhook logs yet">
+                  Webhook requests will appear here when they are received.
+                </Alert>
+              ) : (
+                <ScrollArea>
+                  <Table striped highlightOnHover withTableBorder>
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th>Timestamp</Table.Th>
+                        <Table.Th>Method</Table.Th>
+                        <Table.Th>Status</Table.Th>
+                        <Table.Th>URL</Table.Th>
+                        <Table.Th>Actions</Table.Th>
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      {logs.map((log) => (
+                        <Table.Tr key={log.id}>
+                          <Table.Td>
+                            <Text size="sm" c="gray.7">
+                              {formatTimestamp(log.timestamp)}
+                            </Text>
+                          </Table.Td>
+                          <Table.Td>
+                            <Badge
+                              color={getMethodColor(log.method)}
+                              variant="light"
+                            >
+                              {log.method}
+                            </Badge>
+                          </Table.Td>
+                          <Table.Td>
+                            <Badge
+                              color={getStatusColor(log.status)}
+                              variant="light"
+                            >
+                              {log.status === "success" ? "Success" : "Error"}
+                            </Badge>
+                          </Table.Td>
+                          <Table.Td>
+                            <Text size="sm" truncate style={{ maxWidth: 300 }}>
+                              {log.url}
+                            </Text>
+                          </Table.Td>
+                          <Table.Td>
+                            <Tooltip label="View Details">
+                              <ActionIcon
+                                variant="light"
+                                color="blue"
+                                onClick={() => viewLogDetails(log)}
+                              >
+                                <IconEye size={16} />
+                              </ActionIcon>
+                            </Tooltip>
+                          </Table.Td>
+                        </Table.Tr>
+                      ))}
+                    </Table.Tbody>
+                  </Table>
+                </ScrollArea>
+              )}
+            </Stack>
+          </Card>
+        </Stack>
+
+        {/* Log Details Modal */}
+        <Modal
+          opened={modalOpened}
+          onClose={() => setModalOpened(false)}
+          title="Webhook Request Details"
+          size="xl"
+        >
+          {selectedLog && (
+            <Stack gap="md">
+              <Group>
+                <Badge
+                  color={getMethodColor(selectedLog.method)}
+                  variant="light"
+                  size="lg"
+                >
+                  {selectedLog.method}
+                </Badge>
+                <Badge
+                  color={getStatusColor(selectedLog.status)}
+                  variant="light"
+                  size="lg"
+                >
+                  {selectedLog.status === "success" ? "Success" : "Error"}
+                </Badge>
+                <Text size="sm" c="gray.6">
+                  {formatTimestamp(selectedLog.timestamp)}
+                </Text>
+              </Group>
+
+              <Divider />
+
+              <div>
+                <Text fw={600} mb="xs">
+                  URL:
+                </Text>
+                <Code block>{selectedLog.url}</Code>
+              </div>
+
+              <div>
+                <Text fw={600} mb="xs">
+                  Headers:
+                </Text>
+                <Code block>
+                  {JSON.stringify(selectedLog.headers, null, 2)}
+                </Code>
+              </div>
+
+              {selectedLog.body && (
+                <div>
+                  <Text fw={600} mb="xs">
+                    Body:
+                  </Text>
+                  <Code block>{JSON.stringify(selectedLog.body, null, 2)}</Code>
+                </div>
+              )}
+
+              {selectedLog.error && (
+                <div>
+                  <Text fw={600} mb="xs" c="red">
+                    Error:
+                  </Text>
+                  <Code block color="red">
+                    {selectedLog.error}
+                  </Code>
+                </div>
+              )}
+            </Stack>
+          )}
+        </Modal>
+      </Container>
+    </div>
+  );
+}
