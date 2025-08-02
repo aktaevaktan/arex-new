@@ -15,7 +15,7 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">
-          Topex Logistics - Панель Администратора
+          Arex Logistics - Панель Администратора
         </h1>
         <p className="text-gray-600">Перенаправление на страницу входа...</p>
       </div>
